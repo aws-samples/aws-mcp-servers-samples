@@ -10,6 +10,7 @@
 | 4 | Time Server | 让Agent知道当前实际时间 | chuanxie@ | [time-server](time_server/README.md) |
 | 5 | Html Render Service | 把Markdown文件或者HTML转成网页渲染出来 | chuanxie@ | [Html-Render-Service](html_render_service/README.md) |
 | 6 | GameLift MCP Server | 使用MCP协议来获取当前账户的GameLift相关信息 | seanguo@ yuzp@ | [gamelift-mcp-server](gamelift-mcp-server/README.md) |
+| 7 | S3 Upload Server | 上传文件到S3并返回公共访问链接的MCP服务器 | hcihang@ | [s3-upload-server](s3_upload_server/README.md) |
 
 ## Demo MCP on Amazon Bedrock 
 推荐Bedrock MCP Demo：
