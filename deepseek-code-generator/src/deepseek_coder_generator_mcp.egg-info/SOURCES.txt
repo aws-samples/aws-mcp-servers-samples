@@ -1,0 +1,10 @@
+README.md
+pyproject.toml
+src/__init__.py
+src/server.py
+src/deepseek_coder_generator_mcp.egg-info/PKG-INFO
+src/deepseek_coder_generator_mcp.egg-info/SOURCES.txt
+src/deepseek_coder_generator_mcp.egg-info/dependency_links.txt
+src/deepseek_coder_generator_mcp.egg-info/entry_points.txt
+src/deepseek_coder_generator_mcp.egg-info/requires.txt
+src/deepseek_coder_generator_mcp.egg-info/top_level.txt

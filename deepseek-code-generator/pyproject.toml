@@ -1,0 +1,18 @@
+[project]
+name = "deepseek-coder-generator-mcp"
+version = "0.1.0"
+description = "MCP server for generating code using OpenAI compatible APIs (DeepSeek, etc.)"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "mcp[cli]>=1.9.0",
+    "openai>=1.0.0",
+    "python-dotenv>=1.0.0"
+]
+
+[project.scripts]
+deepseek-coder-generator = "deepseek_coder_generator.server:main"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"

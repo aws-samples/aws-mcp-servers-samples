@@ -1,0 +1,2 @@
+[console_scripts]
+deepseek-coder-generator = deepseek_coder_generator.server:main

@@ -1,0 +1,217 @@
+# DeepSeek Coder Generator MCP Server
+
+A Model Context Protocol (MCP) server that provides comprehensive code generation capabilities using OpenAI compatible APIs, specifically optimized for DeepSeek Coder and other coding-focused language models.
+
+## Features
+
+This MCP server provides the following tools:
+
+- **generate_code**: Generate code based on requirements and programming language
+- **explain_code**: Explain existing code and provide comprehensive documentation
+- **refactor_code**: Refactor and improve existing code for better quality
+- **debug_code**: Help debug code and suggest fixes for issues
+- **generate_tests**: Generate comprehensive unit tests for given code
+- **code_review**: Perform thorough code review and suggest improvements
+
+## Supported Languages
+
+The server supports various programming languages including:
+- Python
+- JavaScript/TypeScript
+- Java
+- C/C++
+- Go
+- Rust
+- PHP
+- Ruby
+- Swift
+- Kotlin
+- And many more...
+
+## Installation
+
+1. Clone or download this MCP server to your local machine
+2. Install dependencies:
+
+```bash
+cd MCP/openai-code-generator
+pip install -e .
+```
+
+## Configuration
+
+The server requires the following environment variables:
+
+### Required
+- `OPENAI_API_KEY`: Your API key for the OpenAI compatible service
+
+### Optional
+- `OPENAI_BASE_URL`: Base URL for the API (default: "https://api.deepseek.com")
+- `DEFAULT_MODEL`: Default model to use (default: "deepseek-coder")
+- `MAX_TOKENS`: Maximum tokens for responses (default: 4000)
+- `TEMPERATURE`: Temperature for code generation (default: 0.1)
+
+### Example Environment Setup
+
+Create a `.env` file in the server directory:
+
+```env
+OPENAI_API_KEY=your_api_key_here
+OPENAI_BASE_URL=https://api.deepseek.com
+DEFAULT_MODEL=deepseek-coder
+MAX_TOKENS=4000
+TEMPERATURE=0.1
+```
+
+### For DeepSeek API
+1. Sign up at [DeepSeek Platform](https://platform.deepseek.com/)
+2. Create an API key in your dashboard
+3. Use `https://api.deepseek.com` as the base URL
+4. Use `deepseek-coder` as the model name
+
+### For Other OpenAI Compatible APIs
+- **OpenAI**: Use `https://api.openai.com/v1` and models like `gpt-4`, `gpt-3.5-turbo`
+- **Azure OpenAI**: Use your Azure endpoint URL
+- **Local APIs**: Use your local server URL (e.g., `http://localhost:8000/v1`)
+
+## MCP Configuration
+
+Add the server to your MCP settings file:
+
+### For Cline/Claude Desktop
+Add to `~/Library/Application Support/Code/User/globalStorage/rooveterinaryinc.roo-cline/settings/mcp_settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "deepseek-coder": {
+      "command": "uv",
+      "args": [
+            "--directory",
+            "/path/to/deepseek-code-generator/src",
+            "run",
+            "server.py"
+            ],
+      "env": {
+        "OPENAI_API_KEY": "your_api_key_here",
+        "OPENAI_BASE_URL": "https://api.deepseek.com",
+        "DEFAULT_MODEL": "deepseek-coder",
+        "MAX_TOKENS":16000,
+      }
+    }
+  }
+}
+```
+
+### For Claude Desktop App
+Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "deepseek-coder": {
+      "command": "python",
+      "args": ["-m", "deepseek_coder_generator.server"],
+      "cwd": "/path/to/MCP/openai-code-generator",
+      "env": {
+        "OPENAI_API_KEY": "your_api_key_here",
+        "OPENAI_BASE_URL": "https://api.deepseek.com",
+        "DEFAULT_MODEL": "deepseek-coder"
+      }
+    }
+  }
+}
+```
+
+## Usage Examples
+
+Once configured, you can use the tools through your MCP client:
+
+### Generate Code
+```
+Generate a Python function that calculates the factorial of a number using recursion
+```
+
+### Explain Code
+```
+Explain this Python code: [paste your code here]
+```
+
+### Refactor Code
+```
+Refactor this code to improve readability and performance: [paste your code here]
+```
+
+### Debug Code
+```
+Help me debug this code that's throwing an error: [paste your code and error message]
+```
+
+### Generate Tests
+```
+Generate unit tests for this function: [paste your code here]
+```
+
+### Code Review
+```
+Review this code and suggest improvements: [paste your code here]
+```
+
+## Tool Parameters
+
+### generate_code
+- `requirements` (required): Description of what the code should do
+- `language` (required): Programming language (e.g., "python", "javascript", "java")
+- `style` (optional): Code style preference ("clean", "functional", "oop")
+- `include_comments` (optional): Whether to include comments (default: true)
+- `include_tests` (optional): Whether to include basic tests (default: false)
+
+### explain_code
+- `code` (required): The code to explain
+- `language` (optional): Programming language if not auto-detectable
+- `detail_level` (optional): Detail level ("basic", "medium", "detailed")
+
+### refactor_code
+- `code` (required): The code to refactor
+- `language` (optional): Programming language if not auto-detectable
+- `goals` (optional): List of refactoring goals (default: ["readability", "performance"])
+
+### debug_code
+- `code` (required): The code to debug
+- `language` (optional): Programming language if not auto-detectable
+- `error_message` (optional): Any error message encountered
+
+### generate_tests
+- `code` (required): The code to generate tests for
+- `language` (optional): Programming language if not auto-detectable
+- `test_framework` (optional): Preferred testing framework
+
+### code_review
+- `code` (required): The code to review
+- `language` (optional): Programming language if not auto-detectable
+- `focus_areas` (optional): Specific areas to focus on
+
+## Troubleshooting
+
+### Common Issues
+
+1. **API Key Error**: Make sure your `OPENAI_API_KEY` is correctly set
+2. **Model Not Found**: Verify the model name is correct for your API provider
+3. **Connection Error**: Check your `OPENAI_BASE_URL` and internet connection
+4. **Rate Limiting**: Some APIs have rate limits; wait and retry if needed
+
+### Logging
+
+The server logs important information to help with debugging. Check the console output for error messages and API call details.
+
+## Development
+
+To modify or extend the server:
+
+1. Edit `deepseek_coder_generator/server.py`
+2. Add new tools using the `@mcp.tool()` decorator
+3. Test your changes locally before deployment
+
+## License
+
+This project is open source and available under the MIT License.
