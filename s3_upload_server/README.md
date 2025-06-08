@@ -40,7 +40,12 @@ An MCP server that provides file upload functionality to AWS S3 with presigned U
          "args": [
            "--directory", "/path/to/s3_upload_server",
            "run", "src/server.py"
-         ]
+         ],
+        "env": {
+          "AWS_ACCESS_KEY_ID":"your access key",
+          "AWS_SECRET_ACCESS_KEY":"your secret acess key",
+          "AWS_SESSION_TOKEN":"" //optional 
+        }
        }
      }
    }
