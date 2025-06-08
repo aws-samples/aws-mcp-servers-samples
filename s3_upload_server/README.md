@@ -44,7 +44,8 @@ An MCP server that provides file upload functionality to AWS S3 with presigned U
         "env": {
           "AWS_ACCESS_KEY_ID":"your access key",
           "AWS_SECRET_ACCESS_KEY":"your secret acess key",
-          "AWS_SESSION_TOKEN":"" //optional 
+          "AWS_SESSION_TOKEN":"", //optional
+          "EXPIRE_HOURS":144 // 24*7 maximum allowed
         }
        }
      }

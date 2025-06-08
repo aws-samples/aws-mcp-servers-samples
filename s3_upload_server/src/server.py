@@ -21,6 +21,7 @@ DEFAULT_AWS_REGION = 'cn-northwest-1'
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+expire_hours = int(os.environ.get('EXPIRE_HOURS',144))
 
 mcp = FastMCP("s3-upload-server")
 
@@ -28,9 +29,7 @@ def get_aws_credentials() -> Dict[str, str]:
     """Get AWS credentials from environment variables"""
     access_key = os.environ.get('AWS_ACCESS_KEY_ID')
     secret_key = os.environ.get('AWS_SECRET_ACCESS_KEY')
-    session_token = os.environ.get('AWS_SESSION_TOKEN')  # Optional
-    expire_hours = int(os.environ.get('EXPIRE_HOURS',144))
-    
+    session_token = os.environ.get('AWS_SESSION_TOKEN')  # Optional    
     if not access_key or not secret_key:
         raise ValueError("AWS credentials not found in environment variables. Please set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY.")
     
