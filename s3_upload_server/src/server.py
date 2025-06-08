@@ -29,6 +29,7 @@ def get_aws_credentials() -> Dict[str, str]:
     access_key = os.environ.get('AWS_ACCESS_KEY_ID')
     secret_key = os.environ.get('AWS_SECRET_ACCESS_KEY')
     session_token = os.environ.get('AWS_SESSION_TOKEN')  # Optional
+    expire_hours = int(os.environ.get('EXPIRE_HOURS',144))
     
     if not access_key or not secret_key:
         raise ValueError("AWS credentials not found in environment variables. Please set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY.")
@@ -115,7 +116,7 @@ def upload_file_to_s3(s3_client, bucket_name: str, file_name: str, file_content:
         presigned_url = s3_client.generate_presigned_url(
             'get_object',
             Params={'Bucket': bucket_name, 'Key': s3_key},
-            ExpiresIn=3600  # 1 hour in seconds
+            ExpiresIn=3600*expire_hours # 7 days in seconds (maximum allowed)
         )
         
         logger.info(f"Successfully uploaded {file_name} and generated presigned URL")
