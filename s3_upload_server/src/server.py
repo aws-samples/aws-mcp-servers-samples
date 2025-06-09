@@ -31,7 +31,7 @@ def get_aws_credentials() -> Dict[str, str]:
     secret_key = os.environ.get('AWS_SECRET_ACCESS_KEY')
     session_token = os.environ.get('AWS_SESSION_TOKEN')  # Optional    
     if not access_key or not secret_key:
-        raise ValueError("AWS credentials not found in environment variables. Please set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY.")
+        return None
     
     credentials = {
         'aws_access_key_id': access_key,
@@ -51,10 +51,16 @@ def get_account_id(region: str = None) -> str:
     """Get current AWS account ID using STS"""
     try:
         credentials = get_aws_credentials()
-        if region:
-            sts_client = boto3.client('sts', region_name=region, **credentials)
+        if credentials:
+            if region:
+                sts_client = boto3.client('sts', region_name=region, **credentials)
+            else:
+                sts_client = boto3.client('sts', **credentials)
         else:
-            sts_client = boto3.client('sts', **credentials)
+            if region:
+                sts_client = boto3.client('sts', region_name=region)
+            else:
+                sts_client = boto3.client('sts')
         response = sts_client.get_caller_identity()
         return response['Account']
     except NoCredentialsError:
@@ -149,7 +155,10 @@ def upload_file(file_name: str, file_content: str) -> str:
         bucket_name = f"strands-agent-cn-demo-{account_id}"
         
         # Initialize S3 client with region and explicit credentials
-        s3_client = boto3.client('s3', region_name=region, **credentials)
+        if credentials:
+            s3_client = boto3.client('s3', region_name=region, **credentials)
+        else:
+            s3_client = boto3.client('s3', region_name=region)
         
         # Create bucket if it doesn't exist
         create_bucket_if_not_exists(s3_client, bucket_name, region)
