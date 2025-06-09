@@ -1,0 +1,12 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "aos-mcp-server-cn"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-cn-north-1"
+s3_prefix = "aos-mcp-server"
+region = "cn-north-1"
+profile = "cn"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "McpAuthToken=\"***\" OpenSearchHost=\"***\" OpenSearchPort=\"443\" OpenSearchIndex=\"dockb-index\" OpenSearchUsername=\"***\" OpenSearchPassword=\"***\" EmbeddingApiToken=\"***\""

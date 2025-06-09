@@ -1,0 +1,142 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AOS MCP Server - Lambda-based MCP server for Amazon OpenSearch Service
+
+Parameters:
+  McpAuthToken:
+    Type: String
+    NoEcho: true
+    Description: "The authentication token for MCP"
+  
+  OpenSearchHost:
+    Type: String
+    Description: "OpenSearch cluster endpoint"
+  
+  OpenSearchPort:
+    Type: Number
+    Default: 443
+    Description: "OpenSearch port"
+  
+  OpenSearchIndex:
+    Type: String
+    Default: "knowledge-base"
+    Description: "Default OpenSearch index name"
+  
+  OpenSearchUsername:
+    Type: String
+    Description: "OpenSearch username"
+    NoEcho: true
+  
+  OpenSearchPassword:
+    Type: String
+    Description: "OpenSearch password"
+    NoEcho: true
+  
+  EmbeddingApiToken:
+    Type: String
+    Description: "API token for embedding service"
+    NoEcho: true
+
+Globals:
+  Function:
+    Timeout: 60
+    Runtime: python3.12
+    Architectures: [x86_64]
+
+Resources:
+  McpApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Auth:
+        Authorizers:
+          TokenAuthorizer:
+            FunctionArn: !GetAtt McpAuthorizerFunction.Arn
+            FunctionPayloadType: TOKEN
+            Identity:
+              ReauthorizeEvery: 300
+              Header: Authorization
+
+  McpAuthorizerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.lambda_handler
+      CodeUri: authorizer/
+      Environment:
+        Variables:
+          MCP_AUTH_TOKEN: !Ref McpAuthToken
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action: 'lambda:InvokeFunction'
+              Resource: '*'
+
+  McpSessionsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "${AWS::StackName}-mcp-sessions"
+      AttributeDefinitions:
+        - AttributeName: session_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: session_id
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+      TimeToLiveSpecification:
+        AttributeName: expires_at
+        Enabled: true
+      Tags:
+        - Key: Purpose
+          Value: MCP Session Management
+
+  AosMcpServerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.lambda_handler
+      CodeUri: ./
+      Environment:
+        Variables:
+          MCP_SESSION_TABLE: !Ref McpSessionsTable
+          OPENSEARCH_HOST: !Ref OpenSearchHost
+          OPENSEARCH_PORT: !Ref OpenSearchPort
+          OPENSEARCH_INDEX: !Ref OpenSearchIndex
+          OPENSEARCH_USERNAME: !Ref OpenSearchUsername
+          OPENSEARCH_PASSWORD: !Ref OpenSearchPassword
+          EMBEDDING_API_TOKEN: !Ref EmbeddingApiToken
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:CreateTable
+                - dynamodb:DeleteItem
+                - dynamodb:GetItem
+                - dynamodb:PutItem
+                - dynamodb:UpdateItem
+                - dynamodb:DescribeTable
+              Resource: !GetAtt McpSessionsTable.Arn
+            - Effect: Allow
+              Action:
+                - es:ESHttpGet
+                - es:ESHttpPost
+                - es:ESHttpPut
+                - es:ESHttpDelete
+                - es:ESHttpHead
+              Resource: !Sub "arn:${AWS::Partition}:es:${AWS::Region}:${AWS::AccountId}:domain/*"
+      Events:
+        McpAPI:
+          Type: Api
+          Properties:
+            Path: /mcp
+            Method: ANY
+            RestApiId: !Ref McpApi
+            Auth:
+              Authorizer: TokenAuthorizer
+
+Outputs:
+  AOSMCPServerApi:
+    Description: "API Gateway endpoint URL for AOS MCP server"
+    Value: !Sub "https://${McpApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/mcp"
+  McpSessionsTableName:
+    Description: "Name of the DynamoDB table for MCP sessions"
+    Value: !Ref McpSessionsTable
