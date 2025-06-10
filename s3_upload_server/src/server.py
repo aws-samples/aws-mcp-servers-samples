@@ -124,7 +124,7 @@ def upload_file_to_s3(s3_client, bucket_name: str, file_name: str, file_content:
             ExpiresIn=3600*expire_hours # 7 days in seconds (maximum allowed)
         )
         
-        logger.info(f"Successfully uploaded {file_name} and generated presigned URL")
+        logger.info(f"Successfully uploaded {file_name} and generated presigned URL {presigned_url}")
         return presigned_url
         
     except ClientError as e:
@@ -132,14 +132,14 @@ def upload_file_to_s3(s3_client, bucket_name: str, file_name: str, file_content:
 
 @mcp.tool()
 def upload_file(file_name: str, file_content: str) -> str:
-    """Upload a file to S3 bucket and return a presigned URL with 1-hour expiration
+    """Upload a file to S3 bucket and return a presigned URL with expiration
     
     Args:
         file_name: Name of the file to upload (including extension)
         file_content: Content of the file as a string
     
     Returns:
-        presigned S3 URL of the uploaded file (expires in 1 hour)
+        presigned S3 URL of the uploaded file
     """
     try:
         # Get AWS credentials
