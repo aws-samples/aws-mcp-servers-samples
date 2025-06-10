@@ -69,9 +69,19 @@ def get_account_id(region: str = None) -> str:
         raise ValueError(f"Failed to get AWS account ID: {str(e)}")
 
 def get_content_type(file_name: str) -> str:
-    """Get content type based on file extension"""
+    """Get content type based on file extension with proper charset for text files"""
     content_type, _ = mimetypes.guess_type(file_name)
-    return content_type or 'application/octet-stream'
+    if not content_type:
+        content_type = 'application/octet-stream'
+    
+    # Add charset=utf-8 for text-based content types to ensure proper Unicode display
+    if content_type.startswith(('text/', 'application/json', 'application/xml', 'application/javascript')):
+        if 'charset' not in content_type:
+            content_type += '; charset=utf-8'
+    elif content_type == 'text/html' or file_name.lower().endswith('.html'):
+        content_type = 'text/html; charset=utf-8'
+    
+    return content_type
 
 def create_bucket_if_not_exists(s3_client, bucket_name: str, region: str) -> bool:
     """Create S3 bucket if it doesn't exist"""
@@ -109,11 +119,14 @@ def upload_file_to_s3(s3_client, bucket_name: str, file_name: str, file_content:
         # Get content type
         content_type = get_content_type(file_name)
         
-        # Upload file (without public ACL)
+        # Encode content as UTF-8 bytes
+        file_bytes = file_content.encode('utf-8')
+        
+        # Upload file with proper content type
         s3_client.put_object(
             Bucket=bucket_name,
             Key=s3_key,
-            Body=file_content.encode('utf-8'),
+            Body=file_bytes,
             ContentType=content_type
         )
         
@@ -124,7 +137,7 @@ def upload_file_to_s3(s3_client, bucket_name: str, file_name: str, file_content:
             ExpiresIn=3600*expire_hours # 7 days in seconds (maximum allowed)
         )
         
-        logger.info(f"Successfully uploaded {file_name} and generated presigned URL {presigned_url}")
+        logger.info(f"Successfully uploaded {file_name} with content type {content_type} and generated presigned URL")
         return presigned_url
         
     except ClientError as e:
