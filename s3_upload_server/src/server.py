@@ -63,8 +63,8 @@ def get_account_id(region: str = None) -> str:
                 sts_client = boto3.client('sts')
         response = sts_client.get_caller_identity()
         return response['Account']
-    except NoCredentialsError:
-        raise ValueError("AWS credentials not configured. Please configure AWS credentials.")
+    except NoCredentialsError as e:
+        raise ValueError(f"AWS credentials not configured. Please configure AWS credentials {str(e)}.")
     except Exception as e:
         raise ValueError(f"Failed to get AWS account ID: {str(e)}")
 
