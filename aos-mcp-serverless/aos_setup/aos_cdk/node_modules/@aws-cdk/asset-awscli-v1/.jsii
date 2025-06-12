@@ -1,0 +1,64 @@
+{
+  "author": {
+    "email": "aws-cdk-dev@amazon.com",
+    "name": "Amazon Web Services",
+    "organization": true,
+    "roles": [
+      "author"
+    ]
+  },
+  "description": "A library that contains the AWS CLI for use in Lambda Layers",
+  "docs": {
+    "stability": "stable"
+  },
+  "homepage": "https://github.com/cdklabs/awscdk-asset-awscli#readme",
+  "jsiiVersion": "5.8.8 (build cca5125)",
+  "keywords": [
+    "cdk"
+  ],
+  "license": "Apache-2.0",
+  "metadata": {
+    "jsii": {
+      "pacmak": {
+        "hasDefaultInterfaces": true
+      }
+    },
+    "tscRootDir": "src"
+  },
+  "name": "@aws-cdk/asset-awscli-v1",
+  "readme": {
+    "markdown": "# Asset with AWS CLI v1\n<!--BEGIN STABILITY BANNER-->\n\n---\n\n![cdk-constructs: Stable](https://img.shields.io/badge/cdk--constructs-stable-success.svg?style=for-the-badge)\n\n---\n\n<!--END STABILITY BANNER-->\n\nThis module bundles the AWS CLI v1 as a local asset. It exposes\nconstants `ASSET_FILE` and `LAYER_SOURCE_DIR` that can be consumed\nvia the CDK `Asset` construct.\n\nAny Lambda Function that uses uses this asset must use a Python 3.x\nruntime.\n\nUsage:\n\n```ts\n// AwsCliLayer bundles the AWS CLI in a lambda layer\nimport { ASSET_FILE, LAYER_SOURCE_DIR } from '@aws-cdk/asset-awscli-v1';\nimport * as lambda from 'aws-cdk-lib/aws-lambda';\nimport * as s3_assets from 'aws-cdk-lib/aws-s3-assets';\nimport { FileSystem } from 'aws-cdk-lib';\n\ndeclare const fn: lambda.Function;\nconst asset = new s3_assets.Asset(this, 'layer-asset', {\n  path: ASSET_FILE,\n  assetHash: FileSystem.fingerprint(LAYER_SOURCE_DIR),\n});\nfn.addLayers(new lambda.LayerVersion(this, 'AwsCliLayer', {\n  code: lambda.Code.fromBucket(asset.bucket, asset.s3ObjectKey),\n}));\n```\n\nThe CLI will be installed under `/opt/awscli/aws`.\n"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cdklabs/awscdk-asset-awscli.git"
+  },
+  "schema": "jsii/0.10.0",
+  "targets": {
+    "dotnet": {
+      "namespace": "Amazon.CDK.Asset.AwsCliV1",
+      "packageId": "Amazon.CDK.Asset.AwsCliV1"
+    },
+    "go": {
+      "moduleName": "github.com/cdklabs/awscdk-asset-awscli-go",
+      "packageName": "awscliv1"
+    },
+    "java": {
+      "maven": {
+        "artifactId": "cdk-asset-awscli-v1",
+        "groupId": "software.amazon.awscdk"
+      },
+      "package": "software.amazon.awscdk.cdk.asset.awscli.v1"
+    },
+    "js": {
+      "npm": "@aws-cdk/asset-awscli-v1"
+    },
+    "python": {
+      "distName": "aws-cdk.asset-awscli-v1",
+      "module": "aws_cdk.asset_awscli_v1"
+    }
+  },
+  "types": {},
+  "version": "2.2.237",
+  "fingerprint": "MOTOnLjpBqx6/bzUq6OUEJO1pPgujwV9OharzQs+q5g="
+}

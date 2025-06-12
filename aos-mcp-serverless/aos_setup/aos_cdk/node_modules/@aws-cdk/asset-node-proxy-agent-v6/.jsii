@@ -1,0 +1,64 @@
+{
+  "author": {
+    "email": "aws-cdk-dev@amazon.com",
+    "name": "Amazon Web Services",
+    "organization": true,
+    "roles": [
+      "author"
+    ]
+  },
+  "description": "@aws-cdk/asset-node-proxy-agent-v6",
+  "docs": {
+    "stability": "stable"
+  },
+  "homepage": "https://github.com/cdklabs/awscdk-asset-node-proxy-agent#readme",
+  "jsiiVersion": "5.2.51 (build c8e3c7a)",
+  "keywords": [
+    "cdk"
+  ],
+  "license": "Apache-2.0",
+  "metadata": {
+    "jsii": {
+      "pacmak": {
+        "hasDefaultInterfaces": true
+      }
+    },
+    "tscRootDir": "src"
+  },
+  "name": "@aws-cdk/asset-node-proxy-agent-v6",
+  "readme": {
+    "markdown": "# AWS Lambda Layer with the NPM dependency proxy-agent\n<!--BEGIN STABILITY BANNER-->\n\n---\n\n![cdk-constructs: Stable](https://img.shields.io/badge/cdk--constructs-stable-success.svg?style=for-the-badge)\n\n---\n\n<!--END STABILITY BANNER-->\n\nThis module bundles the NPM dependency [`proxy-agent`](https://www.npmjs.com/package/proxy-agent)\nas a local asset. It exposes constants `ASSET_FILE` and `LAYER_SOURCE_DIR` that can be consumed\nvia the CDK `Asset` construct.\n\n> - proxy-agent Version: 6.3.0\n\nUsage:\n\n```ts\nimport { ASSET_FILE, LAYER_SOURCE_DIR } from '@aws-cdk/asset-node-proxy-agent-v6';\nimport * as lambda from 'aws-cdk-lib/aws-lambda';\nimport * as s3_assets from 'aws-cdk-lib/aws-s3-assets';\nimport { FileSystem } from 'aws-cdk-lib';\n\ndeclare const fn: lambda.Function;\nconst asset = new s3_assets.Asset(this, 'layer-asset', {\n  path: ASSET_FILE,\n  assetHash: FileSystem.fingerprint(LAYER_SOURCE_DIR),\n});\n\nfn.addLayers(new lambda.LayerVersion(this, 'ProxyAgentLayer', {\n  code: lambda.Code.fromBucket(asset.bucket, asset.s3ObjectKey),\n}));\n```\n\n[`proxy-agent`](https://www.npmjs.com/package/proxy-agent) will be installed under `/nodejs/node_modules`.\n"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cdklabs/awscdk-asset-node-proxy-agent.git"
+  },
+  "schema": "jsii/0.10.0",
+  "targets": {
+    "dotnet": {
+      "namespace": "Amazon.CDK.Asset.NodeProxyAgentV6",
+      "packageId": "Amazon.CDK.Asset.NodeProxyAgentV6"
+    },
+    "go": {
+      "moduleName": "github.com/cdklabs/awscdk-asset-node-proxy-agent-go",
+      "packageName": "nodeproxyagentv6"
+    },
+    "java": {
+      "maven": {
+        "artifactId": "cdk-asset-node-proxy-agent-v6",
+        "groupId": "software.amazon.awscdk"
+      },
+      "package": "software.amazon.awscdk.cdk.asset.node.proxy.agent.v6"
+    },
+    "js": {
+      "npm": "@aws-cdk/asset-node-proxy-agent-v6"
+    },
+    "python": {
+      "distName": "aws-cdk.asset-node-proxy-agent-v6",
+      "module": "aws_cdk.asset_node_proxy_agent_v6"
+    }
+  },
+  "types": {},
+  "version": "2.1.0",
+  "fingerprint": "pQoVqhr/wH02X5KUjbhWO/LmYKKCoEQ7ft5WzuXjpWs="
+}
