@@ -29,7 +29,10 @@ This project is a Lambda-based MCP (Model Context Protocol) server designed for 
 ├── requirements.txt        # Python dependencies
 ├── lambda_mcp/             # MCP server core code
 ├── authorizer/             # API authentication handler
-└── common/                 # Shared components and utilities
+├── common/                 # Shared components and utilities
+└── aos_setup/              # OpenSearch setup and document ingestion tools
+    ├── aos_cdk/            # CDK project for OpenSearch deployment
+    └── doc_ingest/         # Document ingestion utility
 ```
 
 ## Installation and Deployment
@@ -39,7 +42,7 @@ This project is a Lambda-based MCP (Model Context Protocol) server designed for 
 - AWS CLI installed and configured
 - AWS SAM CLI installed
 - Valid AWS account (China region)
-- Amazon OpenSearch Service cluster created
+- Amazon OpenSearch Service cluster created (or use the provided CDK project to deploy one)
 - Silicon Flow API token
   
     
@@ -82,6 +85,7 @@ PUT dockb-index
 
 ```bash
 git clone <repository-url>
+cd aos-mcp-serverless
 ```
 
 2. Build the project
@@ -119,6 +123,43 @@ export AUTH_TOKEN=xxxx
     
 python strands_agent_test/similarity_search_demo.py
 ```
+
+## OpenSearch Setup and Document Ingestion
+
+The project includes tools for setting up Amazon OpenSearch Service and ingesting documents:
+
+### OpenSearch Deployment with CDK
+
+The `aos_setup/aos_cdk` directory contains a CDK project for deploying Amazon OpenSearch Service in AWS China regions:
+
+```bash
+cd aos_setup/aos_cdk
+npm install
+npm run build
+cdk deploy --profile cn
+```
+
+Configuration options are available in `opensearch-config.json`:
+- Cluster name, domain name
+- Instance type and count
+- Volume size and availability zones
+- Security settings (encryption, HTTPS)
+
+### Document Ingestion
+
+The `aos_setup/doc_ingest` directory contains a Python utility for ingesting documents into OpenSearch:
+
+```bash
+cd aos_setup/doc_ingest
+python doc_ingest.py --file /path/to/document.txt --host your-opensearch-endpoint \
+  --username admin --password your-password --token your-embedding-api-token
+```
+
+Features:
+- Reads text files and splits them into chunks
+- Converts text to vector embeddings
+- Stores documents with metadata in OpenSearch
+- Configurable chunk size and overlap
 
 ## Configuration Parameters
 
