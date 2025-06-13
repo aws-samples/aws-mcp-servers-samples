@@ -1,8 +1,7 @@
 # Ignore AWS SAM build directory
 .aws-sam/
 serverless-mcp-setup/.aws-sam
-*.cdk.out
-*.node_modules
+
 
 # Python
 __pycache__/
