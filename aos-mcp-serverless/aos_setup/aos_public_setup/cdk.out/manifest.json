@@ -1,0 +1,118 @@
+{
+  "version": "31.0.0",
+  "artifacts": {
+    "AosPublicSetupStack-New.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "AosPublicSetupStack-New.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "AosPublicSetupStack-New": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/cn-northwest-1",
+      "properties": {
+        "templateFile": "AosPublicSetupStack-New.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-cn-northwest-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-cn-northwest-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-cn-northwest-1/b6cc29f09602c4b9d92540a04f578a958a24d885f9876d583962c9eab19af3eb.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "AosPublicSetupStack-New.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-cn-northwest-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "AosPublicSetupStack-New.assets"
+      ],
+      "metadata": {
+        "/AosPublicSetupStack-New/OpenSearchDomain/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OpenSearchDomain85D65221"
+          }
+        ],
+        "/AosPublicSetupStack-New/OpenSearchDomain/AccessPolicy/Resource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OpenSearchDomainAccessPolicyA914E688"
+          }
+        ],
+        "/AosPublicSetupStack-New/OpenSearchDomain/AccessPolicy/CustomResourcePolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OpenSearchDomainAccessPolicyCustomResourcePolicyF60DBA00"
+          }
+        ],
+        "/AosPublicSetupStack-New/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2"
+          }
+        ],
+        "/AosPublicSetupStack-New/AWS679f53fac002430cb0da5b7982bd2287/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AWS679f53fac002430cb0da5b7982bd22872D164C4C"
+          }
+        ],
+        "/AosPublicSetupStack-New/OpenSearchDomainEndpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OpenSearchDomainEndpoint"
+          }
+        ],
+        "/AosPublicSetupStack-New/OpenSearchDashboardsURL": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OpenSearchDashboardsURL"
+          }
+        ],
+        "/AosPublicSetupStack-New/OpenSearchUsername": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OpenSearchUsername"
+          }
+        ],
+        "/AosPublicSetupStack-New/ConfigFilePath": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ConfigFilePath"
+          }
+        ],
+        "/AosPublicSetupStack-New/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/AosPublicSetupStack-New/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/AosPublicSetupStack-New/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "AosPublicSetupStack-New"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}
