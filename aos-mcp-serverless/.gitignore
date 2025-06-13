@@ -1,5 +1,6 @@
 # Ignore AWS SAM build directory
 .aws-sam/
+serverless-mcp-setup/.aws-sam
 
 # Python
 __pycache__/

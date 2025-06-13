@@ -1,0 +1,63 @@
+{
+  "author": {
+    "email": "aws-cdk-dev@amazon.com",
+    "name": "Amazon Web Services, Inc.",
+    "roles": [
+      "author"
+    ]
+  },
+  "description": "A Lambda Layer that contains kubectl v1.20",
+  "docs": {
+    "stability": "stable"
+  },
+  "homepage": "https://github.com/cdklabs/awscdk-asset-kubectl#readme",
+  "jsiiVersion": "5.5.20 (build d4f0601)",
+  "keywords": [
+    "cdk"
+  ],
+  "license": "Apache-2.0",
+  "metadata": {
+    "jsii": {
+      "pacmak": {
+        "hasDefaultInterfaces": true
+      }
+    },
+    "tscRootDir": "src"
+  },
+  "name": "@aws-cdk/asset-kubectl-v20",
+  "readme": {
+    "markdown": "# Asset with KubeCtl v1.20\n<!--BEGIN STABILITY BANNER-->\n\n---\n\n![cdk-constructs: Stable](https://img.shields.io/badge/cdk--constructs-stable-success.svg?style=for-the-badge)\n\n---\n\n<!--END STABILITY BANNER-->\n\nThis module bundles the\n[`kubectl`](https://kubernetes.io/docs/reference/kubectl/kubectl/) and the\n[`helm`](https://helm.sh/) command line as a local asset. It exposes constants\n`ASSET_FILE` and `LAYER_SOURCE_DIR` that can be consumed via the cdk `Asset`\nconstruct.\n\n> - Helm Version: 3.8.1\n> - Kubectl Version: 1.20.0\n>\n\nUsage:\n\n```ts\n// ASSET_FILE bundles the 'kubectl' and 'helm' command lines\nimport { ASSET_FILE, LAYER_SOURCE_DIR } from '@aws-cdk/asset-kubectl-v20';\nimport * as lambda from 'aws-cdk-lib/aws-lambda';\nimport * as s3_assets from 'aws-cdk-lib/aws-s3-assets';\nimport { FileSystem } from 'aws-cdk-lib';\n\ndeclare const fn: lambda.Function;\nconst asset = new s3_assets.Asset(this, 'layer-asset', {\n  path: ASSET_FILE,\n  assetHash: FileSystem.fingerprint(LAYER_SOURCE_DIR),\n});\n\nfn.addLayers(new lambda.LayerVersion(this, 'KubectlLayer', {\n  code: lambda.Code.fromBucket(asset.bucket, asset.s3ObjectKey),\n  description: '/opt/kubectl/kubectl and /opt/helm/helm',\n}));\n```\n\n`kubectl` will be installed under `/opt/kubectl/kubectl`, and `helm` will be installed under `/opt/helm/helm`.\n"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cdklabs/awscdk-asset-kubectl.git"
+  },
+  "schema": "jsii/0.10.0",
+  "targets": {
+    "dotnet": {
+      "namespace": "Amazon.CDK.Asset.KubectlV20",
+      "packageId": "Amazon.CDK.Asset.KubectlV20"
+    },
+    "go": {
+      "moduleName": "github.com/cdklabs/awscdk-asset-kubectl-go",
+      "packageName": "kubectlv20"
+    },
+    "java": {
+      "maven": {
+        "artifactId": "cdk-asset-kubectl-v20",
+        "groupId": "software.amazon.awscdk"
+      },
+      "package": "software.amazon.awscdk.cdk.asset.kubectl.v20"
+    },
+    "js": {
+      "npm": "@aws-cdk/asset-kubectl-v20"
+    },
+    "python": {
+      "distName": "aws-cdk.asset-kubectl-v20",
+      "module": "aws_cdk.asset_kubectl_v20"
+    }
+  },
+  "types": {},
+  "version": "2.1.4",
+  "fingerprint": "r/HAF/c+pt1fZvzMB3yC7+076isiDOhTmnvK//SYIoI="
+}

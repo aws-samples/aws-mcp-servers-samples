@@ -16,7 +16,7 @@ import json
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from common.aos_client import OpenSearchClient
+from aos_client import OpenSearchClient
 from tools.embedding import EmbeddingTools
 
 # 配置日志
