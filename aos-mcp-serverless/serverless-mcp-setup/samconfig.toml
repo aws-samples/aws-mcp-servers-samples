@@ -1,0 +1,11 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "aos-mcp-serverless"
+s3_bucket = "aos-mcp-serverless-714495948824-cn-northwest-1"
+s3_prefix = "aos-mcp-serverless"
+region = "cn-northwest-1"
+confirm_changeset = false
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "McpAuthToken=\"xxxx\" OpenSearchHost=\"xxxx\" OpenSearchIndex=\"dockb-index\" OpenSearchUsername=\"xxxx\" OpenSearchPassword=\"xxxx\" EmbeddingApiToken=\"sk-xxxx\""

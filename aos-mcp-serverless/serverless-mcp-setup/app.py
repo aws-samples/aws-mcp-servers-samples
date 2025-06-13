@@ -1,14 +1,14 @@
 from lambda_mcp.lambda_mcp import LambdaMCPServer
 import os
 import json
-from typing import Dict, List, Optional, Any
+from typing import Dict, List
 from common.aos_client import OpenSearchClient
 import requests
 
 # Get configuration from environment variables
 opensearch_host = os.environ.get('OPENSEARCH_HOST', '')
 opensearch_port = int(os.environ.get('OPENSEARCH_PORT', '443'))
-opensearch_index = os.environ.get('OPENSEARCH_INDEX', 'default')
+opensearch_index = os.environ.get('OPENSEARCH_INDEX', 'dockb-index')
 opensearch_username = os.environ.get('OPENSEARCH_USERNAME', '')
 opensearch_password = os.environ.get('OPENSEARCH_PASSWORD', '')
 embedding_api_token = os.environ.get('EMBEDDING_API_TOKEN', '')
@@ -176,14 +176,14 @@ def index_text_with_embedding(text: str, document_id: str = None, metadata: str 
 
 
 @mcp_server.tool()
-def text_similarity_search(text: str, k: int = 10, score: float = 0.0) -> Dict:
+def text_similarity_search(text: str, k: int = 10, score: float = 0.6) -> Dict:
     """
     Search in Knowledge Base by searching for similar documents by converting text to embedding and performing kNN search.
 
     Args:
         text: The text to search for similar documents
         k: Number of similar documents to return
-        score: Minimum similarity score threshold (only return results with score > this value)
+        Score: Minimum similarity score threshold, with a default value of 0.6  (only return results with score > this value)
 
     Returns:
         Dictionary containing search results or error information

@@ -1,0 +1,9 @@
+{
+  "domain": "${Token[TOKEN.645]}",
+  "endpoint": "${Token[TOKEN.637]}",
+  "username": "admin",
+  "password": "******",
+  "version": "2.19",
+  "region": "cn-northwest-1",
+  "accessType": "PUBLIC"
+}

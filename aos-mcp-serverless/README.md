@@ -1,148 +1,123 @@
-# AOS MCP Server (Amazon OpenSearch Model Context Protocol)
+# Amazon OpenSearch MCP Serverless 部署指南
 
-This project is a Lambda-based MCP (Model Context Protocol) server designed for Amazon OpenSearch Service, supporting vector search and knowledge base management capabilities. The server can be deployed in AWS China regions and integrates with embedding services available in China regions.
+本指南将帮助您部署基于 Amazon OpenSearch 的 MCP (Model Context Protocol) 服务器，该服务器支持向量搜索和知识库管理功能。
 
-## Key Features
+## 前提条件
 
-- Based on AWS Serverless architecture using Lambda and API Gateway
-- Supports text-to-vector embedding conversion
-- Provides vector similarity search functionality
-- Integrates with Amazon OpenSearch Service
-- Supports session management and authentication
+在开始部署之前，请确保您已经满足以下条件：
 
-## Technology Stack
+- 已安装并配置 AWS CLI
+- 已安装 AWS SAM CLI
+- 有效的 AWS 账户（支持中国区域）
+- Python 3.8 或更高版本
+- 嵌入 API 令牌（用于文本向量转换）
+- 基本的 bash 和命令行知识
 
-- Python 3.12
-- AWS Serverless Application Model (SAM)
-- AWS Lambda
-- Amazon API Gateway
-- Amazon DynamoDB
-- Amazon OpenSearch Service
-- Silicon Flow Embedding API (China region)
+## 部署步骤
 
-## Project Structure
-
-```
-.
-├── app.py                  # Main application entry point
-├── template.yaml           # SAM template
-├── requirements.txt        # Python dependencies
-├── lambda_mcp/             # MCP server core code
-├── authorizer/             # API authentication handler
-└── common/                 # Shared components and utilities
-```
-
-## Installation and Deployment
-
-### Prerequisites
-
-- AWS CLI installed and configured
-- AWS SAM CLI installed
-- Valid AWS account (China region)
-- Amazon OpenSearch Service cluster created
-- Silicon Flow API token
-  
-    
-Create Index in AWS OpenSearch
-```bash
-PUT dockb-index
-{
-  "settings": {
-    "index": {
-      "number_of_shards": 1,
-      "number_of_replicas": 0,
-      "refresh_interval": "60s",
-      "knn": true,
-      "knn.algo_param.ef_search": 32
-    }
-  },
-  "mappings": {
-    "properties": {
-      "dense_vector": {
-        "type": "knn_vector",
-        "dimension": 1024,
-        "method": {
-          "name": "hnsw",
-          "engine": "faiss",
-          "parameters": {
-            "ef_construction": 32,
-            "m": 16
-          }
-        }
-      }
-    }
-  }
-}
-
-```
-
-### Deployment Steps
-
-1. Clone the repository
+### 步骤 1：克隆代码库
 
 ```bash
 git clone <repository-url>
+cd aos-mcp-serverless
 ```
 
-2. Build the project
+### 步骤 2：准备部署参数
+
+部署过程需要以下参数：
+
+- `McpAuthToken`: MCP 服务器的认证令牌（您可以自定义）
+- `OpenSearchUsername`: OpenSearch 用户名（您可以自定义）
+- `OpenSearchPassword`: OpenSearch 密码（您可以自定义）
+- `EmbeddingApiToken`: 嵌入 API 令牌（需要从嵌入服务提供商获取）
+- `AWS_PROFILE`: AWS 配置文件名称（可选，默认为 "default"）
+- `AWS_REGION`: AWS 区域（可选，默认为 "cn-northwest-1"）
+
+### 步骤 3：执行部署脚本
+
+使用以下命令执行部署脚本：
 
 ```bash
-sam build
+./aos_serverless_mcp_setup.sh \
+  --McpAuthToken "your-mcp-auth-token" \
+  --OpenSearchUsername "your-opensearch-username" \
+  --OpenSearchPassword "your-opensearch-password" \
+  --EmbeddingApiToken "your-embedding-api-token" \
+  --region "your-aws-region"
 ```
 
-3. Deploy the project
+例如：
 
 ```bash
-sam deploy --profile cn
+./aos_serverless_mcp_setup.sh \
+  --McpAuthToken "mcp-token-123456" \
+  --OpenSearchUsername "admin" \
+  --OpenSearchPassword "Admin@123" \
+  --EmbeddingApiToken "sf-api-token-123456" \
+  --region "cn-northwest-1"
 ```
 
-Or with parameter overrides:
+### 步骤 4：部署过程详解
 
-```bash
-sam deploy --profile cn --parameter-overrides \
-  "McpAuthToken=your-auth-token" \
-  "OpenSearchHost=your-opensearch-endpoint" \
-  "OpenSearchUsername=your-username" \
-  "OpenSearchPassword=your-password" \
-  "EmbeddingApiToken=your-embedding-api-token"
+部署脚本将执行以下操作：
+
+1. **检查 OpenSearch 是否已部署**
+   - 如果已部署，将使用现有的 OpenSearch 集群
+   - 如果未部署，将创建新的 OpenSearch 集群
+
+2. **部署 OpenSearch 集群（如果需要）**
+   - 使用 CDK 部署 OpenSearch 集群
+   - 等待集群可用
+   - 获取 OpenSearch 端点
+
+3. **导入文档到 OpenSearch**
+   - 安装必要的 Python 依赖
+   - 设置目录结构
+   - 将示例知识文档导入到 OpenSearch
+
+4. **部署无服务器 MCP 设置**
+   - 更新 SAM 配置
+   - 构建 SAM 项目
+   - 部署 SAM 项目
+   - 获取 API Gateway 端点
+
+### 步骤 5：验证部署
+
+部署完成后，您将看到以下输出：
+
+```
+=== Deployment Complete ===
+OpenSearch Endpoint: your-opensearch-endpoint
+MCP API Endpoint: your-mcp-api-endpoint
+
 ```
 
-## Usage
+## 使用示例
 
-After deployment, you will receive an API Gateway endpoint URL. You can use this URL to interact with the MCP server.
-
-### Searching Similar Documents
+### 搜索相似文档
 
 ```bash
 export API_ENDPOINT=https://xxxxx/Prod/mcp
-export AUTH_TOKEN=xxxx
+export AUTH_TOKEN=your-mcp-auth-token
     
 python strands_agent_test/similarity_search_demo.py
 ```
 
-## Configuration Parameters
+## 清理资源
 
-| Parameter Name | Description | Default Value |
-|----------------|-------------|---------------|
-| McpAuthToken | Authentication token for the MCP server | - |
-| OpenSearchHost | OpenSearch cluster endpoint | - |
-| OpenSearchPort | OpenSearch port | 443 |
-| OpenSearchIndex | OpenSearch index name | dockb-index |
-| OpenSearchUsername | OpenSearch username | - |
-| OpenSearchPassword | OpenSearch password | - |
-| EmbeddingApiToken | API token for embedding service | - |
+当您不再需要这些资源时，可以使用清理脚本删除它们：
 
-## China Region Specific Notes
+```bash
+./cleanup_aos_mcp.sh --profile your-aws-profile --region your-aws-region
+```
 
-- The project is optimized for AWS China regions
-- Uses the China region Silicon Flow API endpoint (`https://api.siliconflow.cn/v1/embeddings`)
-- Default model for text embedding is `Pro/BAAI/bge-m3`
+例如：
 
-## Security Considerations
+```bash
+./cleanup_aos_mcp.sh --profile cn --region cn-northwest-1
+```
 
-- Sensitive credentials are passed through environment variables
-- API authentication uses a token mechanism
-- AWS Secrets Manager is recommended for managing sensitive information in production environments
+清理脚本将执行以下操作：
 
-
-
+1. 删除 MCP Serverless 堆栈
+2. 删除 OpenSearch 堆栈

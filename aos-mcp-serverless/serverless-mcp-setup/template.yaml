@@ -19,7 +19,7 @@ Parameters:
   
   OpenSearchIndex:
     Type: String
-    Default: "knowledge-base"
+    Default: "dockb-index"
     Description: "Default OpenSearch index name"
   
   OpenSearchUsername:
@@ -136,7 +136,7 @@ Resources:
 Outputs:
   AOSMCPServerApi:
     Description: "API Gateway endpoint URL for AOS MCP server"
-    Value: !Sub "https://${McpApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/mcp"
+    Value: !Sub "https://${McpApi}.execute-api.${AWS::Region}.amazonaws.com.cn/Prod/mcp"
   McpSessionsTableName:
     Description: "Name of the DynamoDB table for MCP sessions"
     Value: !Ref McpSessionsTable
