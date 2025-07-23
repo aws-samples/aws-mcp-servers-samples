@@ -12,6 +12,7 @@
 | 6 | GameLift MCP Server | 使用MCP协议来获取当前账户的GameLift相关信息 | seanguo@ yuzp@ | [gamelift-mcp-server](gamelift-mcp-server/README.md) |
 | 7 | S3 Upload Server | 上传文件到S3并返回公共访问链接的MCP服务器 | hcihang@ | [s3-upload-server](s3_upload_server/README.md) |
 | 8 | AOS MCP Server | 基于Serverless架构的Amazon OpenSearch MCP服务器，支持向量搜索和知识注入 | tangaws@ | [aos-mcp-serverless](aos-mcp-serverless/serverless-mcp-setup/README.md) |
+| 9 | S3 Upload Server for AgentCore MCP runtime | S3文件上传MCPserver部署至AgentCore的方法 | runpeng@ | [s3-upload-server-for-agentcore](s3_upload_server_for_agentcore/README.md) |
 
 ## Demo MCP on Amazon Bedrock 
 推荐Bedrock MCP Demo：
