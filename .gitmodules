@@ -1,0 +1,3 @@
+[submodule "aws-mcp-servers-samples"]
+	path = aws-mcp-servers-samples
+	url = https://github.com/aws-samples/aws-mcp-servers-samples.git
